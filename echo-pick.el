@@ -40,6 +40,7 @@
 ;;
 ;;; Change Log:
 ;;
+;;    Added function to display text from 'help-echo.
 ;;    Removed option for decider functions, as they break autoloaded modes.
 ;;
 ;; 2008-07-16 (0.1)
@@ -56,6 +57,7 @@
 
 (defcustom echo-pick-function-list
   `((git-blame-mode . git-blame-identify)
+    (lambda () (get-char-property (point) 'help-echo))
     (lambda () (let ((this-command nil)
                      (last-command (aref eldoc-message-commands 0))
                      (eldoc-mode t)
