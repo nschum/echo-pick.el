@@ -40,6 +40,8 @@
 ;;
 ;;; Change Log:
 ;;
+;;    Removed option for decider functions, as they break autoloaded modes.
+;;
 ;; 2008-07-16 (0.1)
 ;;    Initial release.
 ;;
@@ -111,8 +113,7 @@ All functions are expected to take no arguments."
    ((functionp func) func)
    ((consp func) (when (let ((condition (car func)))
                          (cond ((eq major-mode condition) t)
-                               ((boundp condition) (symbol-value condition))
-                               ((functionp condition) (funcall condition))))
+                               ((boundp condition) (symbol-value condition))))
                    (cdr func)))
    ((boundp func) (symbol-value func))))
 
