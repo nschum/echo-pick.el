@@ -38,8 +38,22 @@
 ;; `echo-pick-mode' respects a lot of Eldoc's settings, including
 ;; `eldoc-message-commands'.
 ;;
+;; Here's an example of how a list of functions could look like:
+;;
+;; (setq echo-pick-function-list
+;;       `((git-blame-mode . git-blame-identify)
+;;         (lambda () (get-char-property (point) 'help-echo))
+;;         (lambda () (let ((this-command nil)
+;;                          (last-command (aref eldoc-message-commands 0))
+;;                          (eldoc-mode t)
+;;                          (eldoc-documentation-function nil))
+;;                      (eldoc-print-current-symbol-info)))
+;;         (when (eq major-mode 'emacs-lisp-mode) eldoc-documentation-function)
+;;         (lambda () (save-excursion semantic-idle-summary-idle-function))))
+;;
 ;;; Change Log:
 ;;
+;;    Removed default value for as not to break anybody's default configuration.
 ;;    Added function to display text from 'help-echo.
 ;;    Removed option for decider functions, as they break autoloaded modes.
 ;;
@@ -55,16 +69,7 @@
   "Filter for echo area status messages."
   :group 'convenience)
 
-(defcustom echo-pick-function-list
-  `((git-blame-mode . git-blame-identify)
-    (lambda () (get-char-property (point) 'help-echo))
-    (lambda () (let ((this-command nil)
-                     (last-command (aref eldoc-message-commands 0))
-                     (eldoc-mode t)
-                     (eldoc-documentation-function nil))
-                 (eldoc-print-current-symbol-info)))
-    eldoc-documentation-function
-    semantic-idle-summary-idle-function)
+(defcustom echo-pick-function-list nil
   "*List of functions to call when determining what to print in the echo area.
 The echo area will display result of the first function in the list not to
 return nil or an empty string.
